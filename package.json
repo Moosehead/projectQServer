@@ -1,0 +1,28 @@
+{
+  "name": "kue",
+  "version": "1.0.0",
+  "description": "ikue backend is called kue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moosehead/projectQServer.git"
+  },
+  "keywords": [
+    "heroku"
+  ],
+  "author": "Moosa Baquie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Moosehead/projectQServer/issues"
+  },
+  "homepage": "https://github.com/Moosehead/projectQServer#readme",
+  "dependencies": {
+    "authy": "^1.2.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.28"
+  }
+}
