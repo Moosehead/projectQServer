@@ -18,7 +18,7 @@ function Authy(apiKey, api_url) {
 
 Authy.prototype.phones = function() {
     
-    self = this;
+    var self = this;
     return {
         verification_start: function(phone_number, country_code, params, callback) {
             if (arguments.length == 3) {

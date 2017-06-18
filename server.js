@@ -61,7 +61,7 @@ function init() {
     return app;
 }
 
-var routes = require('routes/routes');
+var routes = require('./routes/routes');
 routes(app);
 
 
