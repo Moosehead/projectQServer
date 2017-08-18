@@ -3,7 +3,7 @@
  */
 var request = require('request');
 var querystring = require("querystring");
-var VERSION = "1.1"
+var VERSION = "1.1";
 
 
 module.exports = function (api_key, api_url) {

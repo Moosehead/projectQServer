@@ -11,6 +11,9 @@ module.exports = function(app) {
         .get(authy.textCode)
         .post(authy.textVerifcation);
 
+    app.route('/line/:company/:name')
+        .post(notif.startNotifs);
+
     //
     // app.route('/tasks/:taskId')
     //     .get(todoList.read_a_task)
