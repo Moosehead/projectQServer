@@ -3,7 +3,9 @@
  */
 
 module.exports = function(app) {
+
     var authy = require('../controller/authyController');
+    var notif = require('../controller/notifController');
 
 
     // todoList Routes
