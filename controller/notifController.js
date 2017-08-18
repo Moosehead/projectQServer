@@ -7,6 +7,11 @@ var twilio = require('twilio');
 
 var app = express();
 
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
 exports.startNotifs = function(req, res) {
 
     // Initialize Firebase
@@ -22,10 +27,11 @@ exports.startNotifs = function(req, res) {
 
     var accountSid = 'AC0f3e56279282b0e241bf4929d020c1d1';
     var authToken = '8822593550195cf816cfc9864c1f608c';
+    var senderNumber = '+6479526696';
     var client = new twilio(accountSid, authToken);
 
-    var company = req.query.company;
-    var name = req.query.name;
+    var company = req.body.company;
+    var name = req.body.name;
 
     DBLineRef = 'lines/' + company + '/' + name;
 
@@ -41,7 +47,7 @@ exports.startNotifs = function(req, res) {
                             client.messages.create({
                                 body: 'You are next in line at ' + company + '!',
                                 to: number,
-                                from: '+6479526696'
+                                from: senderNumber
                             });
                         }
                     });

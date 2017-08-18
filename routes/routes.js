@@ -11,7 +11,7 @@ module.exports = function(app) {
         .get(authy.textCode)
         .post(authy.textVerifcation);
 
-    app.route('/line/:company/:name')
+    app.route('/line')
         .post(notif.startNotifs);
 
     //
