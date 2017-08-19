@@ -63,14 +63,19 @@ exports.startNotifs = function(req, res) {
                     });
                 }
                 firebase.database().ref(DBLineRef).orderByKey().once('value').then(function (snapshot) {
+                    logger.info('checking for other customers...');
                     if ((snapshot.val() !== null) && (snapshot.val() != 1)) {
                         var customerArr = [];
+                        var timeStep = snapshot.child('meta').avg_wait_time;
+                        var i = 0;
                         snapshot.forEach(function (childSnapshot) {
                             var item = childSnapshot.val().key;
-                            customerArr.push(item);
+                            customerArr[i] = item;
+                            i += 1;
                         });
                         if(customerArr.length > 1) {
                             var second = customerArr[1];
+                            logger.info('second: ' + second);
                             firebase.database().ref('users/' + second).once('value').then(function (snapshot) {
                                 if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
                                     var phone = snapshot.val().phone;
@@ -78,7 +83,7 @@ exports.startNotifs = function(req, res) {
                                     number = '+1' + number.join("");
                                     logger.info('texting : ' + number);
                                     client.messages.create({
-                                        body: 'You are second in line at ' + company + '!',
+                                        body: 'You are second in line at ' + company + '! You have about' + timeStep + 'seconds.',
                                         to: number,
                                         from: senderNumber
                                     }, function(err, message) {
@@ -90,7 +95,8 @@ exports.startNotifs = function(req, res) {
                             });
                         }
                         if(customerArr.length > 2) {
-                            var third = customArr[2];
+                            var third = customerArr[2];
+                            logger.info('third: ' + third);
                             firebase.database().ref('users/' + third).once('value').then(function (snapshot) {
                                 if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
                                     var phone = snapshot.val().phone;
@@ -98,7 +104,7 @@ exports.startNotifs = function(req, res) {
                                     number = '+1' + number.join("");
                                     logger.info('texting : ' + number);
                                     client.messages.create({
-                                        body: 'You are third in line at ' + company + '!',
+                                        body: 'You are third in line at ' + company + '! You have about' + 2*timeStep + 'seconds.',
                                         to: number,
                                         from: senderNumber
                                     }, function(err, message) {
