@@ -6,9 +6,11 @@ module.exports = function(app) {
 
     var authy = require('../controller/authyController');
     var notif = require('../controller/notifController');
+    var cors = require('cors');
 
+    var app = express();
+    app.use(cors({credentials: true, origin: true}));
 
-    // todoList Routes
     app.route('/api')
         .get(authy.textCode)
         .post(authy.textVerifcation);
