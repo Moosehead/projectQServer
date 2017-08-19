@@ -8,7 +8,6 @@ module.exports = function(app) {
     var notif = require('../controller/notifController');
     var cors = require('cors');
 
-    var app = express();
     app.use(cors({credentials: true, origin: true}));
 
     app.route('/api')
@@ -18,9 +17,4 @@ module.exports = function(app) {
     app.route('/line')
         .post(notif.startNotifs);
 
-    //
-    // app.route('/tasks/:taskId')
-    //     .get(todoList.read_a_task)
-    //     .put(todoList.update_a_task)
-    //     .delete(todoList.delete_a_task);
 };

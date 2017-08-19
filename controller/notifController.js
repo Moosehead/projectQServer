@@ -64,9 +64,13 @@ exports.startNotifs = function(req, res) {
                 }
                 firebase.database().ref(DBLineRef).orderByKey().once('value').then(function (snapshot) {
                     logger.info('checking for other customers...');
+                    var timeStep = 60;
+                    firebase.database().ref(DBLineRef + '/meta').orderByKey().once('value').then(function (snapshot) {
+                        timeStep = parseInt(snapshot.val().avg_wait_Time.toString());
+                    });
                     if ((snapshot.val() !== null) && (snapshot.val() != 1)) {
                         var customerArr = [];
-                        var timeStep = snapshot.child('meta').avg_wait_time;
+                        logger.info('time step: ' + timeStep);
                         var i = 0;
                         snapshot.forEach(function (childSnapshot) {
                             var item = childSnapshot.val().key;
@@ -78,12 +82,13 @@ exports.startNotifs = function(req, res) {
                             logger.info('second: ' + second);
                             firebase.database().ref('users/' + second).once('value').then(function (snapshot) {
                                 if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
-                                    var phone = snapshot.val().phone;
-                                    var number = phone.match(/\d/g);
-                                    number = '+1' + number.join("");
+                                    var phone = snapshot.val().phone.toString();
+                                    logger.info('phone : ' + phone);
+                                    var number = phone.replace(/\D/g,'');
+                                    number = '+1' + number;
                                     logger.info('texting : ' + number);
                                     client.messages.create({
-                                        body: 'You are second in line at ' + company + '! You have about' + timeStep + 'seconds.',
+                                        body: 'You are second in line at ' + company + '! You have about ' + timeStep + ' seconds.',
                                         to: number,
                                         from: senderNumber
                                     }, function(err, message) {
@@ -99,12 +104,13 @@ exports.startNotifs = function(req, res) {
                             logger.info('third: ' + third);
                             firebase.database().ref('users/' + third).once('value').then(function (snapshot) {
                                 if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
-                                    var phone = snapshot.val().phone;
-                                    var number = phone.match(/\d/g);
-                                    number = '+1' + number.join("");
+                                    var phone = snapshot.val().phone.toString();
+                                    logger.info('phone : ' + phone);
+                                    var number = phone.replace(/\D/g,'');
+                                    number = '+1' + number;
                                     logger.info('texting : ' + number);
                                     client.messages.create({
-                                        body: 'You are third in line at ' + company + '! You have about' + 2*timeStep + 'seconds.',
+                                        body: 'You are third in line at ' + company + '! You have about ' + 2*timeStep + ' seconds.',
                                         to: number,
                                         from: senderNumber
                                     }, function(err, message) {
