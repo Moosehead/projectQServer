@@ -39,15 +39,11 @@ exports.startNotifs = function(req, res) {
 
     DBLineRef = 'lines/' + company + '/' + name;
 
-    logger.info('LINE REF: ' + DBLineRef);
-
     firebase.database().ref(DBLineRef).once('value').then(function (snapshot) {
         if ((snapshot.val() != null) && (snapshot.val() != 1)) {
-            logger.info('snapshot 1 successful');
             firebase.database().ref(DBLineRef + '/current').on('value', function (snapshot) {
                 if ((snapshot.val() != null) && (snapshot.val() != 1)) {
                     var serving = snapshot.val().current;
-                    logger.info('now serving : ' + serving);
                     firebase.database().ref('users/' + serving).once('value').then(function (snapshot) {
                         if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
                             var phone = snapshot.val().phone;
@@ -60,7 +56,7 @@ exports.startNotifs = function(req, res) {
                                 from: senderNumber
                             }, function(err, message) {
                                 if (err) {
-                                    logger.info(err.message);
+                                    logger.error(err.message);
                                 }
                             });
                         }
@@ -85,6 +81,10 @@ exports.startNotifs = function(req, res) {
                                         body: 'You are second in line at ' + company + '!',
                                         to: number,
                                         from: senderNumber
+                                    }, function(err, message) {
+                                        if (err) {
+                                            logger.error(err.message);
+                                        }
                                     });
                                 }
                             });
@@ -101,6 +101,10 @@ exports.startNotifs = function(req, res) {
                                         body: 'You are third in line at ' + company + '!',
                                         to: number,
                                         from: senderNumber
+                                    }, function(err, message) {
+                                        if (err) {
+                                            logger.error(err.message);
+                                        }
                                     });
                                 }
                             });
