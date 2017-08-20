@@ -63,12 +63,10 @@ exports.startNotifs = function(req, res) {
                     });
                 }
                 firebase.database().ref(DBLineRef).orderByKey().once('value').then(function (snapshot) {
-                    logger.info('checking for other customers...');
                     firebase.database().ref(DBLineRef + '/meta').once('value').then(function (snapshotMeta) {
                         var timeStep = snapshotMeta.val().avg_wait_time;
                         if ((snapshot.val() !== null) && (snapshot.val() != 1)) {
                             var customerArr = [];
-                            logger.info('time step: ' + timeStep);
                             var i = 0;
                             snapshot.forEach(function (childSnapshot) {
                                 var item = childSnapshot.val().key;
@@ -79,11 +77,9 @@ exports.startNotifs = function(req, res) {
                             });
                             if(customerArr.length > 1) {
                                 var second = customerArr[1];
-                                logger.info('second: ' + second);
                                 firebase.database().ref('users/' + second).once('value').then(function (snapshot) {
                                     if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
                                         var phone = snapshot.val().phone.toString();
-                                        logger.info('phone : ' + phone);
                                         var number = phone.replace(/\D/g,'');
                                         number = '+1' + number;
                                         logger.info('texting : ' + number);
@@ -101,11 +97,9 @@ exports.startNotifs = function(req, res) {
                             }
                             if(customerArr.length > 2) {
                                 var third = customerArr[2];
-                                logger.info('third: ' + third);
                                 firebase.database().ref('users/' + third).once('value').then(function (snapshot) {
                                     if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
                                         var phone = snapshot.val().phone.toString();
-                                        logger.info('phone : ' + phone);
                                         var number = phone.replace(/\D/g,'');
                                         number = '+1' + number;
                                         logger.info('texting : ' + number);
