@@ -64,8 +64,8 @@ exports.startNotifs = function(req, res) {
                 }
                 firebase.database().ref(DBLineRef).orderByKey().once('value').then(function (snapshot) {
                     logger.info('checking for other customers...');
-                    firebase.database().ref(DBLineRef + '/meta').orderByKey().once('value').then(function (snapshotMeta) {
-                        var timeStep = parseInt(snapshotMeta.val().avg_wait_Time.toString());
+                    firebase.database().ref(DBLineRef + '/meta').once('value').then(function (snapshotMeta) {
+                        var timeStep = snapshotMeta.val().avg_wait_time;
                         if ((snapshot.val() !== null) && (snapshot.val() != 1)) {
                             var customerArr = [];
                             logger.info('time step: ' + timeStep);
@@ -127,4 +127,6 @@ exports.startNotifs = function(req, res) {
             });
         }
     });
+
+    res.json(200, { "status": "message server started." });
 };
