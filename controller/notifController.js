@@ -75,26 +75,6 @@ exports.startNotifs = function(req, res) {
                                     i += 1;
                                 }
                             });
-                            if(customerArr.length > 1) {
-                                var second = customerArr[1];
-                                firebase.database().ref('users/' + second).once('value').then(function (snapshot) {
-                                    if ((snapshot.val() !== null) && (snapshot.val().phone !== null)) {
-                                        var phone = snapshot.val().phone.toString();
-                                        var number = phone.replace(/\D/g,'');
-                                        number = '+1' + number;
-                                        logger.info('texting : ' + number);
-                                        client.messages.create({
-                                            body: 'You are second in line at ' + company + '! You have about ' + timeStep + ' seconds.',
-                                            to: number,
-                                            from: senderNumber
-                                        }, function(err, message) {
-                                            if (err) {
-                                                logger.error(err.message);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
                             if(customerArr.length > 2) {
                                 var third = customerArr[2];
                                 firebase.database().ref('users/' + third).once('value').then(function (snapshot) {
